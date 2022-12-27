@@ -28,7 +28,7 @@
     - 다시 여러개의 Type으로 하나의 Index 구성
     - Index > Type > Document
 
-![스크린샷 2022-12-27 오후 7.35.34.png](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2022-12-27_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_7.35.34.png)
+![스크린샷 2022-12-27 오후 7.35.34.png](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2022-12-27_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_7.35.34.png)
 
 - Elasticsearch의 질의 방법
     - 커맨드라인의 curl 명령어 사용
@@ -38,27 +38,27 @@
 - 질의 실습
     - 127.0.0.1:9200/_cat/nodes?v
     
-    ![Untitled](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled.png)
+    ![Untitled](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled.png)
     
     - [http://127.0.0.1:9200/_cat/health?v](http://127.0.0.1:9200/_cat/health?v)
     
-    ![Untitled](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%201.png)
+    ![Untitled](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%201.png)
     
     - Kibana DevTool 사용
     
-    ![Untitled](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%202.png)
+    ![Untitled](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%202.png)
     
 - 인덱스 만들기
     - PUT으로 넣어줌
     - indices 는 DB 전체 목록 조회 시 사용
 
-![Untitled](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%203.png)
+![Untitled](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%203.png)
 
-![Untitled](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%204.png)
+![Untitled](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%204.png)
 
-![Untitled](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%205.png)
+![Untitled](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%205.png)
 
-![Untitled](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%206.png)
+![Untitled](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%206.png)
 
 ```python
 // _update를 써서 doc 전체에서 age에 해당하는 내용만 수정
@@ -79,4 +79,4 @@ POST customer/type1/1
 
 - script 형식으로 update도 가능
 
-![Untitled](Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%207.png)
+![Untitled](img/Elasticsearch%20CRUD%208a07b9227d6049cea88d8b06a6207fa1/Untitled%207.png)
