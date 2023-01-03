@@ -1,4 +1,4 @@
-# Elasticsearch 배치 프로세스, 검색 API
+# Elasticsearch 배치 프로세스, 검색 API, 집계
 
 ### Batch Processing
   - _bulk 라는 API를 사용하여 작업을 일괄적으로 수행 가능
@@ -82,3 +82,94 @@
   ```
   ![query](img/query1.png)
   ![query](img/query2.png)
+
+### 검색 _search API
+  - Elasticsearch에서의 검색은 인덱스 또는 타입 단위로 수행
+  - _search API 사용
+  - 질의는 q 매개변수의 값으로 입력
+  1) books 인덱스, book 타입에서 hamlet 검색 : `localhost:9200/books/book/_search?q=hamlet`
+  2) books 인덱스에서 hamlet 검색 : `localhost:9200/books/_search?q=hamlet`
+  3) 전체 인덱스에서 time 검색 : `localhost:9200/_search?q=time`
+  - 특정 필드 검색
+    - q 매개변수에 <필드명: 질의> 입력
+    - 전체 인덱스의 title 필드에서 time 검색 : `/_search?q=title:time`
+  - 다중 조건 검색
+    - and와 or을 사용하여 다수의 조건을 검색
+    - title 필드에서 time과 machine을 검색 : `/_search?q=titme:time AND machine`
+  - explain
+    - 점수 계산에 사용된 상세 값 출력
+    - explain 매개변수를 사용해서 검색 처리 결과 표시 : `/_search?q=title:time&explain`
+  - 요약된 전체 hit 수와 점수(score) 등의 메타 정보를 출력
+    - _source(조회 결과값 나오는거)를 false로 설정하면 도큐먼트 출력 생략 : `/_search?q=title:time&_source=false`
+  - 출력 결과애 표시할 필드를 지정
+    - _source에 표시할 필드를 쉼표 , 로 구분하여 입력
+    - title, author, category 필드만 출력 : `/_search?q=title:time&_source=title,author,category`
+  - 검색 결과의 출력 순서 정렬
+    - sort=필드명 형식 사용 (디폴트로 _score 값 기준)
+    - 내림차순 정렬: sort=필드명:desc (디폴트로 asc(오름차순))
+    - pages 필드를 기준으로 오름차순 정렬 : `/_search?q=author:jules&sort=pages`
+    - pages 필드를 기준으로 내림차순 정렬 : `/_search?q=author:jules&sort=pages:desc`
+  ![searchAPI](img/searchAPI.png)
+  ```
+  GET kibana_sample_data_flights/_doc/_search?q=OriginWeather:Sunny AND DestCountry:AU&_source=OriginWeather,DestCountry,AvgTiketPrice&sort=AvgTicketPrice:desc
+  ```
+
+### 집계
+  - 집계는 데이터에서 통계를 그룹화하고 추출할 수 있는 기능을 제공
+  - Elasticsearch에서는 조회수를 반환하는 검색을 수행할 수 있으며 동시에 한번의 응답으로 조회수와 별도로 집계된 결과도 반환
+  - 이는 질의와 다중 집계를 실행하고 간결하고 단순화된 API를 사용하여 네트워크 라운드 트립을 피하면서 한번의 작업으로 결과를 모두 얻을 수 있다는 점에서 매우 강력하고 효율적 (대신 DB에 부하가 심함)
+  - 예제1) 모든 account를 state별로 그룹화한 다음 count 내림차순으로 정렬된 상위 10개(기본) 상태를 반환 (기본값)
+    - Size=0은 일반 결과를 삭제하여 집계된 결과만 표시
+    ```
+    GET /bank/_search
+    {
+      "size": 0,
+      "aggs": {
+        "group_by_state":{
+          "terms": {"field": "state.keyword"}
+        }
+      }
+    }
+    ```
+    - 각 state의 평균 밸런스 집계
+    ```
+    GET /bank/_searcj
+    {
+      "size": 0,
+      "aggs": {
+        "group_by_state":{
+          "terms": {"field": "state.keyword"},
+          "aggs":{
+            "average_balance":{
+              "avg":{"field": "balance"}
+            }
+          }
+        }
+      }
+    }
+    ```
+  - 예제2) 나이별로 데이터를 그룹화한 뒤 성별로 밸런스 집계
+    ```
+    GET /bank/_search
+    {
+      "size": 0,
+      "aggs":{
+        "group_by_age": {
+          "range": {
+            "field": "age",
+            "ranges": [
+              {"from": 20, "to": 30},
+              {"from": 30, "to": 40},
+              {"from": 40, "to": 50},
+            ]
+          },
+          "aggs": {
+            "group_by_gender":{
+              "terms": {"field": "gender.keyword"},
+              "aggs": {"average_balance": {"avg": {"field": "balance"}}}
+            }
+          }
+        }
+      }
+    }
+    ```
